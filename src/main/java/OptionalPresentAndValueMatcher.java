@@ -1,4 +1,3 @@
-import com.google.common.annotations.VisibleForTesting;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -7,14 +6,13 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
- * Custom Hamcrest matcher to verify whether an Optional is present.
+ * Custom matcher for validating present optionals, with the possibility to chain them with other matchers.
  */
-public class OptionalPresentAndValueMatcher<T> extends TypeSafeMatcher<Optional<T>> {
+public final class OptionalPresentAndValueMatcher<T> extends TypeSafeMatcher<Optional<T>> {
 
     private final Matcher<? super T> matcher;
 
-    @VisibleForTesting
-    OptionalPresentAndValueMatcher(final Matcher<? super T> matcher) {
+    private OptionalPresentAndValueMatcher(final Matcher<? super T> matcher) {
         this.matcher = matcher;
     }
 
@@ -29,6 +27,7 @@ public class OptionalPresentAndValueMatcher<T> extends TypeSafeMatcher<Optional<
     }
 
     @Override
+    @SuppressWarnings("java:S2789") // Sonar complains that this optional should not be nullable, but it is possible
     protected boolean matchesSafely(@Nullable final Optional<T> item) {
         return null != item && item.isPresent() && matcher.matches(item.get());
     }

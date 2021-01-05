@@ -17,65 +17,51 @@ class OptionalEmptyMatcherTest {
     @Test
     void whenOptionalIsEmpty_thenMatchesShouldReturnTrue() {
         final var emptyOpt = Optional.empty();
-        final boolean isEmpty = new OptionalEmptyMatcher<>().matches(emptyOpt);
+        final boolean isEmpty = OptionalEmptyMatcher.emptyOptional().matches(emptyOpt);
         assertThat(isEmpty, is(true));
     }
 
     @Test
     void whenOptionalIsNotEmpty_thenMatchesShouldReturnFalse() {
         final var presentOpt = Optional.of("value");
-        final boolean isEmpty = new OptionalEmptyMatcher<String>().matches(presentOpt);
+        final boolean isEmpty = OptionalEmptyMatcher.emptyOptional().matches(presentOpt);
         assertThat(isEmpty, is(false));
     }
 
     @Test
-    void whenOptionalIsNull_thenMatchesShouldReturnTrue() {
-        final boolean isEmpty = new OptionalEmptyMatcher<String>().matchesSafely(null); // Deliberately null
+    void whenOptionalIsNull_thenMatchesShouldReturnFalse() {
+        final boolean isEmpty = OptionalEmptyMatcher.emptyOptional().matches(null);
         assertThat(isEmpty, is(false));
     }
 
     @Test
-    void whenOptionalIsEmpty_thenMatchesSafelyShouldReturnTrue() {
-        final var emptyOpt = Optional.empty();
-        final boolean isEmpty = new OptionalEmptyMatcher<>().matchesSafely(emptyOpt);
-        assertThat(isEmpty, is(true));
-    }
-
-    @Test
-    void whenOptionalIsNotEmpty_thenMatchesSafelyShouldReturnFalse() {
-        final var presentOpt = Optional.of("value");
-        final boolean isEmpty = new OptionalEmptyMatcher<String>().matchesSafely(presentOpt);
-        assertThat(isEmpty, is(false));
-    }
-
-    @Test
-    void whenDescribeToCalled_thenMismatchDescriptionShouldBeValid() {
-        final var description = new StringDescription();
-        new OptionalEmptyMatcher<>().describeTo(description);
-        assertThat(description.toString(), is("is <Empty Optional>"));
-    }
-
-    @Test
-    void whenOptionalIsEmpty_thenSafeMismatchDescriptionShouldBeValid() {
+    void whenOptionalIsEmpty_thenDescriptionShouldBeValid() {
         final var emptyOpt = Optional.empty();
         final var description = new StringDescription().appendText("some optional");
-        new OptionalEmptyMatcher<>().describeMismatchSafely(emptyOpt, description);
+        OptionalEmptyMatcher.emptyOptional().describeMismatch(emptyOpt, description);
         assertThat(description.toString(), is("some optional had Optional value \"<Empty Optional>\""));
     }
 
     @Test
-    void whenOptionalIsString_thenSafeMismatchDescriptionShouldBeValid() {
+    void whenOptionalIsString_thenDescriptionShouldBeValid() {
         final var optional = Optional.of("aap, noot, mies");
         final var description = new StringDescription().appendText("some optional");
-        new OptionalEmptyMatcher<String>().describeMismatchSafely(optional, description);
+        OptionalEmptyMatcher.emptyOptional().describeMismatch(optional, description);
         assertThat(description.toString(), is("some optional had Optional value \"aap, noot, mies\""));
     }
 
     @Test
-    void whenOptionalIsNotString_thenSafeMismatchDescriptionShouldBeValid() {
+    void whenOptionalIsNotString_thenDescriptionShouldBeValid() {
         final var optional = Optional.of(false);
         final var description = new StringDescription().appendText("some optional");
-        new OptionalEmptyMatcher<Boolean>().describeMismatchSafely(optional, description);
+        OptionalEmptyMatcher.emptyOptional().describeMismatch(optional, description);
         assertThat(description.toString(), is("some optional had Optional value <false>"));
+    }
+
+    @Test
+    void whenDescribeTo_itShouldBeValid() {
+        final var description = new StringDescription();
+        OptionalEmptyMatcher.emptyOptional().describeTo(description);
+        assertThat(description.toString(), is("is <Empty Optional>"));
     }
 }

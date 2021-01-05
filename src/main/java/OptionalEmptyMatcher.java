@@ -1,26 +1,27 @@
-import com.google.common.annotations.VisibleForTesting;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
- * Custom Hamcrest matcher to verify whether an Optional is empty.
+ * Custom matcher for validating empty optionals.
  */
-public class OptionalEmptyMatcher<T> extends TypeSafeMatcher<Optional<T>> {
+public final class OptionalEmptyMatcher extends TypeSafeMatcher<Optional<?>> {
 
-    @VisibleForTesting
-    OptionalEmptyMatcher() {
-        // Visible for testing
+    private OptionalEmptyMatcher() {
+        // Utility class
     }
 
-    public static <T> Matcher<Optional<T>> emptyOptional() {
-        return new OptionalEmptyMatcher<>();
+    @SuppressWarnings("java:S1452") // Wildcard since we are not interested in the return type
+    public static Matcher<Optional<?>> emptyOptional() {
+        return new OptionalEmptyMatcher();
     }
 
     @Override
-    protected boolean matchesSafely(final Optional<T> optional) {
+    @SuppressWarnings("java:S2789") // Sonar complains that this optional should not be nullable, but it is possible
+    protected boolean matchesSafely(@Nullable final Optional<?> optional) {
         return null != optional && optional.isEmpty();
     }
 
@@ -30,7 +31,7 @@ public class OptionalEmptyMatcher<T> extends TypeSafeMatcher<Optional<T>> {
     }
 
     @Override
-    protected void describeMismatchSafely(final Optional<T> item, final Description mismatchDescription) {
+    protected void describeMismatchSafely(final Optional<?> item, final Description mismatchDescription) {
         mismatchDescription.appendText(" had Optional value ");
         if (item.isPresent()) {
             mismatchDescription.appendValue(item.get());
