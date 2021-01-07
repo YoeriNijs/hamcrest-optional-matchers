@@ -22,7 +22,7 @@ public final class OptionalPresentAndValueMatcher<T> extends TypeSafeMatcher<Opt
 
     @Override
     public void describeTo(final Description description) {
-        description.appendText("has Optional value that is ");
+        description.appendText("Optional value that is ");
         matcher.describeTo(description);
     }
 

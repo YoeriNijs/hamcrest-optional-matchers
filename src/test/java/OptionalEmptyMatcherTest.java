@@ -62,6 +62,6 @@ class OptionalEmptyMatcherTest {
     void whenDescribeTo_itShouldBeValid() {
         final var description = new StringDescription();
         OptionalEmptyMatcher.emptyOptional().describeTo(description);
-        assertThat(description.toString(), is("is <Empty Optional>"));
+        assertThat(description.toString(), is("<Empty Optional>"));
     }
 }

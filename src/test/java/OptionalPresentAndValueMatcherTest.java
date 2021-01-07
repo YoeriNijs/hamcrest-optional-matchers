@@ -65,6 +65,6 @@ class OptionalPresentAndValueMatcherTest {
     void whenDescribeTo_itShouldBeValid() {
         final var description = new StringDescription();
         OptionalPresentAndValueMatcher.presentOptionalAnd(notNullValue()).describeTo(description);
-        assertThat(description.toString(), is("has Optional value that is not null"));
+        assertThat(description.toString(), is("Optional value that is not null"));
     }
 }
